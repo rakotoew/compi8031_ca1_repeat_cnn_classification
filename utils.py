@@ -1,6 +1,9 @@
 import os
 import cv2
 
+from main import MIN_PIXEL_IMAGE
+
+
 def resize_image(image, resolution):
     """
     function to resize an image to the desired resolution
@@ -20,10 +23,15 @@ def image_writing(output_directory, image):
     write a specified image to a specified directory
     :return: boolean
     """
-    if 0:
+    if sample_sizes[CLASSES.index(l["category"])] < sample_size_limit:
+        class_directory = os.path.join(output_directory, l["category"])
+        if not os.path.exists(class_directory):
+            os.makedirs(class_directory)
+
+        cv2.imwrite(os.path.join(class_directory, str(l["id"]) + ".jpg"), image)
+        sample_sizes[CLASSES.index(l["category"])] += 1
         return True
-    else:
-        return False
+    return False
 
 
 def image_extraction(dataset_path, label, size_image, output_directory):
@@ -50,15 +58,15 @@ def image_extraction(dataset_path, label, size_image, output_directory):
             round(float(j["box2d"]["x2"])),
             round(float(j["box2d"]["y2"])))
         # excluding the image that are of too low quality
-        if (x2 - x1) * (y2 - y1) < size_image:
+        if (x2 - x1) * (y2 - y1) < MIN_PIXEL_IMAGE:
             excluded_part_count += 1
             continue
 
         extracted_image = image[y1:y2, x1:x2]
-        extracted_image = resize_image(extracted_image)
+        extracted_image = resize_image(extracted_image, 100)
         extracted_image = gray_scale(extracted_image)
 
-        if not image_writing(output_directory, extracted_image):
+        if not image_writing(j, output_directory, extracted_image, sample_sizes, samples_size_limit):
             excluded_part_count += 1
             continue
         extracted_part_count += 1
