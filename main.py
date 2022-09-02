@@ -13,3 +13,12 @@ if __name__ == "__main__":
     # Preprocess validation set
     process.preprocess("./dataset/val", "./dataset/val/labels.json", "./dataset/output/val", SAMPLE_SIZE_LIMIT)
     process.create_test_set("./dataset/out", TEST_SET_SIZE_PERCENTAGE)
+
+    # create model
+    used_model = model.define_model()
+    # show model
+    print(used_model.summary())
+    # fit model
+    model.train_model(used_model, "./dataset/output/train", "./dataset/output/val")
+    # saving model
+    used_model.save("./dataset/output/model.h5")

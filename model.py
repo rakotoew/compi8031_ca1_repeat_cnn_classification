@@ -6,7 +6,7 @@ from data_exploration import CLASSES
 
 IMAGE_SHAPE = (100, 100, 1)
 TARGET_SIZE = (100, 100)
-BATCH_SIZE = 16
+BATCH_SIZE = 64
 
 
 def define_model():
@@ -47,7 +47,7 @@ def train_model(model, training_set, validation_set):
     )
 
     # Training model
-    return model.fit(train_gen, validation_data=val_gen, epochs=10, validation_steps=8)
+    return model.fit(train_gen, validation_data=val_gen, epochs=20, validation_steps=10)
 
 
 def testing_model(model, testing_set):
@@ -63,3 +63,5 @@ def testing_model(model, testing_set):
     test_loss, test_acc = model.evaluate(test_gen)
     print('\nTest accuracy:', test_acc)
     print('\nTest loss:', test_loss)
+
+
