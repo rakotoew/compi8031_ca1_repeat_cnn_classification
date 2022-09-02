@@ -22,3 +22,7 @@ if __name__ == "__main__":
     model.train_model(used_model, "./dataset/output/train", "./dataset/output/val")
     # saving model
     used_model.save("./dataset/output/model.h5")
+
+    # testing model
+    model.testing_model(used_model, "./dataset/output/test")
+    model.test_prediction(used_model)
